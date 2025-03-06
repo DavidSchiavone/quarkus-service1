@@ -1,62 +1,40 @@
 # quarkus-service1
+To run the application with docker you have to execute following shell scripts:
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-
+Start redpanda container
 ```shell script
-./mvnw quarkus:dev
+docker run -d --name=redpanda-1 -p 9092:9092 --network blog-nw docker.redpanda.com/redpandadata/redpanda:v23.3.5 redpanda start --advertise-kafka-addr redpanda-1:9092
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
+Start mysql container
 ```shell script
-./mvnw package
+docker run -d --name mysql-container --network blog-nw -e MYSQL_ROOT_PASSWORD=test05 -e MYSQL_DATABASE=blog-db -e MYSQL_USER=bloguser -e MYSQL_PASSWORD=test05 -p 3306:3306 mysql:8
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
+Wait till the previous containers are fully running and then start the service1 (rest-endpoint)
 ```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+docker run -d --name quarkus-service-1 --network blog-nw -p 8080:8080 ghcr.io/davidschiavone/docker-service-1:latest
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
+Start the service2. (validation-service)
 ```shell script
-./mvnw package -Dnative
+docker run -d --name quarkus-service-2 --network blog-nw -p 8081:8081 ghcr.io/davidschiavone/docker-service-2:latest
+```
+## Test the application
+
+To add a new blog execute the following HTTP request
+```http
+POST localhost:8080/blogs/
+
+{
+    "title": "Test Blog",
+    "content": "Dies ist ein Test Blog"
+}
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+To check if the blog has been validated successfully, run the following HTTP request
+```http
+GET localhost:8080/blogs/
 ```
 
-You can then execute your native executable with: `./target/quarkus-service1-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+If the valid-flag in the response is set to true, the communication between service1 and service2 with redpanda was successfully!
