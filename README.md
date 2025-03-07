@@ -1,6 +1,11 @@
 # quarkus-service1
 To run the application with docker you have to execute following shell scripts:
 
+Create blog-nw
+```shell script
+docker network create blog-nw
+```
+
 Start redpanda container
 ```shell script
 docker run -d --name=redpanda-1 -p 9092:9092 --network blog-nw docker.redpanda.com/redpandadata/redpanda:v23.3.5 redpanda start --advertise-kafka-addr redpanda-1:9092
