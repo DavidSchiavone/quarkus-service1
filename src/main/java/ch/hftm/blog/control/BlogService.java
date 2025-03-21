@@ -47,6 +47,11 @@ public class BlogService {
                     blogToUpdate.setTitle(blog.getTitle());
                     blogToUpdate.setContent(blog.getContent());
                     blogToUpdate.setValid(blog.isValid());
+                    blogToUpdate.setSummary(blog.getSummary());
+                    blogToUpdate.setMetaTitle(blog.getMetaTitle());
+                    blogToUpdate.setMetaDescription(blog.getMetaDescription());
+                    blogToUpdate.setTags(blog.getTags());
+                    blogToUpdate.setValid(blog.isValid());
 
                     blogRepository.persist(blogToUpdate);
 

@@ -12,10 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BlogDTO {
     @NotNull
-    @Size(min = 3, max = 30, message = "Der Titel muss zwischen 3 und 30 Zeichen haben.")
+    @Size(min = 3, max = 255, message = "Der Titel muss zwischen 3 und 30 Zeichen haben.")
     private String title;
     @NotBlank(message = "Der Inhalt muss gesetzt werden.")
     private String content;
-
     private boolean valid;
+    private String summary;
+    private String metaTitle;
+    private String metaDescription;
+    private String tags;
 }

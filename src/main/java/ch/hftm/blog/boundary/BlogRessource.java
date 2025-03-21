@@ -3,7 +3,8 @@ package ch.hftm.blog.boundary;
 import ch.hftm.blog.control.BlogService;
 import ch.hftm.blog.control.dto.BlogDTO;
 import ch.hftm.blog.entity.Blog;
-import ch.hftm.blog.messaging.ValidationRequest;
+import ch.hftm.blog.messaging.GenerateBlogRequest;
+import ch.hftm.blog.messaging.AdditionalInformationsRequest;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -42,7 +43,13 @@ public class BlogRessource {
     public void addBlog(@Valid BlogDTO blog) {
         Blog blog1 = blogService.addBlog(blog);
 
-        kafkaResource.sendRequest(new ValidationRequest(blog1.getBlogid(), blog.getTitle(), blog1.getContent()));
+        kafkaResource.sendRequest(new AdditionalInformationsRequest(blog1.getBlogid(), blog.getTitle(), blog1.getContent()));
+    }
+
+    @Path("generate")
+    @POST
+    public void generateBlog(@Valid GenerateBlogRequest generateBlogRequest) {
+        kafkaResource.sendGenerateBlogRequest(generateBlogRequest);
     }
 
 
