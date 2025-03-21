@@ -12,8 +12,6 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
-import java.util.stream.Collectors;
-
 @ApplicationScoped
 public class BlogKafkaResource {
 
