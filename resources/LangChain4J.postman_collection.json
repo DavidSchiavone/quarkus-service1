@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "b49b529d-8e0b-4085-8088-3d21e23e1461",
+		"name": "LangChain4J",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25923669"
+	},
+	"item": [
+		{
+			"name": "blogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/blogs/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "blog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Sie sind ein kluger Kopf, ein kreativer Denker und Lösungsfinder? Sie verstehen die digitale Welt nicht nur, Sie können und wollen sie auch gestalten, entwickeln, in das Arbeitsleben implementieren. Mit anderen Worten, Sie haben das Zeug, Computerprogramme für verschiedenste Plattformen zu erstellen, zu betreiben und zu unterhalten. Mit dem eidgenössisch anerkannten Studium zum/zur Dipl. Informatiker/-in HF, Schwerpunkt Softwareentwicklung bewegen Sie sich elegant und sicher auf der Datenautobahn und sind unterwegs, ein kompletter «Software Developer/-in» zu werden.\",\r\n    \"title\": \"Erstellen, betreiben und unterhalten von Computeranwendungen\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/blogs/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invalid blog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Die HFTM ist dumm\",\r\n    \"title\": \"HFTM\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/blogs/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "generate blog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"HFTM Grenchen\",\r\n    \"keywords\": [\r\n        \"Informatik\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/blogs/generate",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q&A",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\": \"Um welches Land handelt es sich bei dem Eintrag?\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/blogs/3/qa",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						"3",
+						"qa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "similars",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/blogs/1/similars",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blogs",
+						"1",
+						"similars"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
