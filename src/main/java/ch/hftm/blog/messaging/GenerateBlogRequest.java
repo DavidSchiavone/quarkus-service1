@@ -1,4 +1,6 @@
 package ch.hftm.blog.messaging;
 
-public record GenerateBlogRequest(String topic) {
+import java.util.List;
+
+public record GenerateBlogRequest(String topic, List<String> keywords) {
 }

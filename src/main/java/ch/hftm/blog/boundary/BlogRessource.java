@@ -1,7 +1,10 @@
 package ch.hftm.blog.boundary;
 
+import ch.hftm.blog.control.AiService;
 import ch.hftm.blog.control.BlogService;
 import ch.hftm.blog.control.dto.BlogDTO;
+import ch.hftm.blog.control.dto.QandADTO;
+import ch.hftm.blog.control.dto.QandAResponseDTO;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.messaging.GenerateBlogRequest;
 import ch.hftm.blog.messaging.AdditionalInformationsRequest;
@@ -22,6 +25,9 @@ public class BlogRessource {
 
     @Inject
     BlogKafkaResource kafkaResource;
+
+    @Inject
+    AiService aiService;
 
     @GET
     public List<Blog> getBlogs(@QueryParam("searchStr") Optional<String> searchStr) {
@@ -75,5 +81,52 @@ public class BlogRessource {
             return Response.status(Response.Status.NOT_FOUND)
                     .build();
         }
+    }
+
+    @Path("{id}/qa")
+    @GET
+    public Response qa(@PathParam("id") long id, QandADTO qa) {
+        Blog blog = blogService.getBlog(id);
+
+        if (blog == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        String answer = aiService.answerQuestion(blog.getTitle(), blog.getContent(), qa.getQuestion());
+
+        return Response.ok(new QandAResponseDTO(answer))
+                .build();
+    }
+
+    @Path("{id}/similars")
+    @GET
+    // TODO: this should be optimized with a vector database
+    public Response getSimilars(@PathParam("id") long id) {
+        List<Blog> blogs = blogService.getBlogs(Optional.empty());
+
+        if (blogs.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        if ( blogs.stream()
+                .noneMatch(blog -> blog.getBlogid() == id)) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        List<Long> similarBlogIds = aiService.findSimilarBlogs(id, blogs)
+                .stream()
+                .map(String::trim)
+                .map(Long::parseLong)
+                .toList();
+
+        List<Blog> similarBlogs = blogs.stream()
+                .filter(blog -> similarBlogIds.contains(blog.getBlogid()))
+                .toList();
+
+        return Response.ok(similarBlogs)
+                .build();
     }
 }
