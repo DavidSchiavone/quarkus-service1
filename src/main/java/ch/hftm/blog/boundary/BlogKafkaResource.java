@@ -44,10 +44,12 @@ public class BlogKafkaResource {
         if (blog != null) {
             BlogDTO blogDTO = BlogMapper.INSTANCE.map(blog);
             blogDTO.setValid(additionalInformation.valid());
-            blogDTO.setSummary(additionalInformation.summary());
-            blogDTO.setMetaTitle(additionalInformation.seoInfo().title());
-            blogDTO.setMetaDescription(additionalInformation.seoInfo().metaDescription());
-            blogDTO.setTags(String.join(", ", additionalInformation.tags()));
+            if (additionalInformation.valid()) {
+                blogDTO.setSummary(additionalInformation.summary());
+                blogDTO.setMetaTitle(additionalInformation.seoInfo().title());
+                blogDTO.setMetaDescription(additionalInformation.seoInfo().metaDescription());
+                blogDTO.setTags(String.join(", ", additionalInformation.tags()));
+            }
 
             blogService.updateBlog(response.blogId(), blogDTO);
         }

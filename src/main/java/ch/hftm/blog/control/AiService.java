@@ -24,7 +24,7 @@ public interface AiService {
     @UserMessage("""
             Gib mir eine Liste von blog-IDs zurück mit ähnlichen Inhalten wie der Eintrag mit der ID {id}.
             Suche in folgender Liste: {blogs}
-            Gib mir nur die die IDs zurück.
+            Gib mir nur die die IDs zurück. Der Eintrag mit der ID {id} soll nicht im Ergebnis vorhanden sein.
             """)
     List<String> findSimilarBlogs(@V("id") long id, @V("blogs") List<Blog> blogs);
 }
